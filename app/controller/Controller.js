@@ -78,7 +78,8 @@ class Controller {
                 y: Math.floor(Math.random() * (this.data.board.height / this.data.board.caseSize - 1)) * this.data.board.caseSize
             },
             {
-                eat: true
+                base: "snake-body",
+                type: "food"
             });
         this.data.food.render('board');
     }
@@ -125,6 +126,7 @@ class Controller {
         this.edge();
         this.isCollide();
         this.checkFood();
+        //console.log(this);
     }
 
     /**

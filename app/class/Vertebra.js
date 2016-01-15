@@ -8,19 +8,20 @@ class Vertebra {
     /**
      *
      * @param coordinate Object
-     * @param state Object
+     * @param data Object
      */
-    constructor(coordinate, state) {
+    constructor(coordinate, data) {
         this.coor = {
             x: coordinate.x,
             y: coordinate.y
         };
-        if (state == 'undefined') {
-            this.state = {
-                eat: false
+        if (typeof data === 'undefined') {
+            this.data = {
+                base: "snake-body",
+                type: "body"
             };
         } else {
-            this.state = state;
+            this.data = data;
         }
         this.domElement = this.create();
     }
@@ -46,18 +47,18 @@ class Vertebra {
 
     /**
      *
-     * @param state Object
+     * @param data Object
      */
-    setState(state) {
-        this.state = state;
+    setData(data) {
+        this.data = data;
     }
 
     /**
      *
      * @returns {{eat: boolean}|*}
      */
-    getState() {
-        return this.state;
+    getData() {
+        return this.data;
     }
 
     /**
@@ -67,6 +68,17 @@ class Vertebra {
     create() {
         var vertebraView = new VertebraView(this);
         return vertebraView.createDomElement();
+    }
+
+    /**
+     *
+     */
+    setHtmlData() {
+        this.domElement.className = '';
+        for (var ii in this.data) {
+            console.log(this.data[ii]);
+            this.domElement.className += ' ' + this.data[ii];
+        }
     }
 
     /**
@@ -81,6 +93,8 @@ class Vertebra {
     updateRender() {
         this.domElement.style.left = this.coor.x + 'px';
         this.domElement.style.top = this.coor.y + 'px';
+        this.setHtmlData();
+        //console.log(this.domElement.classList);
     }
 }
 export default Vertebra;

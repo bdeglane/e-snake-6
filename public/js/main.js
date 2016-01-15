@@ -53,9 +53,9 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var game = new _Controller2.default();
-	console.log(game);
+	//console.log(game);
 	game.init();
-	game.run(40);
+	game.run(60);
 
 /***/ },
 /* 1 */
@@ -175,7 +175,8 @@
 	                x: Math.floor(Math.random() * (this.data.board.width / this.data.board.caseSize - 1)) * this.data.board.caseSize,
 	                y: Math.floor(Math.random() * (this.data.board.height / this.data.board.caseSize - 1)) * this.data.board.caseSize
 	            }, {
-	                eat: true
+	                base: "snake-body",
+	                type: "food"
 	            });
 	            this.data.food.render('board');
 	        }
@@ -231,6 +232,7 @@
 	            this.edge();
 	            this.isCollide();
 	            this.checkFood();
+	            //console.log(this);
 	        }
 	
 	        /**
@@ -324,7 +326,7 @@
 	        var game = document.getElementById(target);
 	        this.width = game.offsetWidth;
 	        this.height = game.offsetHeight;
-	        console.log('width ' + this.width, 'height ' + this.height);
+	        //console.log('width ' + this.width,'height ' + this.height);
 	        this.caseSize = caseSize;
 	        this.domElement = this.create();
 	    }
@@ -343,6 +345,7 @@
 	    }, {
 	        key: 'render',
 	        value: function render(target) {
+	            //console.log(this);
 	            var htmlDivTarget = document.getElementById(target);
 	            htmlDivTarget.appendChild(this.domElement);
 	        }
@@ -541,7 +544,10 @@
 	    }, {
 	        key: 'updateBackbone',
 	        value: function updateBackbone() {
-	            this.backbone.iterate(this.coor);
+	            this.backbone.iterate(this.coor, {
+	                base: "snake-body",
+	                type: "body"
+	            });
 	        }
 	    }]);
 	
@@ -595,10 +601,16 @@
 	        this.add(new _Vertebra2.default({
 	            x: caseSize,
 	            y: caseSize
+	        }, {
+	            base: "snake-body",
+	            type: "body"
 	        }));
 	        this.add(new _Vertebra2.default({
 	            x: caseSize * 2,
 	            y: caseSize
+	        }, {
+	            base: "snake-body",
+	            type: "body"
 	        }));
 	    }
 	
@@ -630,35 +642,36 @@
 	        /**
 	         *
 	         * @param newCoordinate Object
+	         * @param newData Object
 	         */
 	
 	    }, {
 	        key: 'iterate',
-	        value: function iterate(newCoordinate) {
+	        value: function iterate(newCoordinate, newData) {
 	            var nextCoor;
-	            var nextSate;
+	            var nextData;
 	            //var vertebra;
 	            for (var ii = this.store.length - 1; ii >= 0; ii--) {
+	                // if it's the body
 	                if (ii > 0) {
-	
 	                    // get vertebra state and props
 	                    nextCoor = this.store[ii - 1].coor;
-	                    //nextSate = this.store[ii - 1].state;
-	
-	                    //if (nextSate) {
-	                    // if it's a new vertebra
-	                    //this.store[ii].setState(nextSate);
-	                    //delete this.store[ii - 1].state;
-	                    //}
-	
+	                    nextData = this.store[ii - 1].data;
+	                    //console.log(nextData);
 	                    // update vertebra
+	                    // & update data
 	                    this.store[ii].setCoor(nextCoor);
+	                    this.store[ii].setData(nextData);
+	                    // else if it's the head
 	                } else if (ii == 0) {
-	                    // update vertebra
-	                    this.store[ii].setCoor(newCoordinate);
-	                }
+	                        // update vertebra with new coordinate
+	                        this.store[ii].setCoor(newCoordinate);
+	                        this.store[ii].setData(newData);
+	                    }
+	                // actualize view
 	                this.store[ii].updateRender();
 	            }
+	            //console.log(this.store);
 	        }
 	    }]);
 	
@@ -694,22 +707,23 @@
 	    /**
 	     *
 	     * @param coordinate Object
-	     * @param state Object
+	     * @param data Object
 	     */
 	
-	    function Vertebra(coordinate, state) {
+	    function Vertebra(coordinate, data) {
 	        _classCallCheck(this, Vertebra);
 	
 	        this.coor = {
 	            x: coordinate.x,
 	            y: coordinate.y
 	        };
-	        if (state == 'undefined') {
-	            this.state = {
-	                eat: false
+	        if (typeof data === 'undefined') {
+	            this.data = {
+	                base: "snake-body",
+	                type: "body"
 	            };
 	        } else {
-	            this.state = state;
+	            this.data = data;
 	        }
 	        this.domElement = this.create();
 	    }
@@ -741,13 +755,13 @@
 	
 	        /**
 	         *
-	         * @param state Object
+	         * @param data Object
 	         */
 	
 	    }, {
-	        key: 'setState',
-	        value: function setState(state) {
-	            this.state = state;
+	        key: 'setData',
+	        value: function setData(data) {
+	            this.data = data;
 	        }
 	
 	        /**
@@ -756,9 +770,9 @@
 	         */
 	
 	    }, {
-	        key: 'getState',
-	        value: function getState() {
-	            return this.state;
+	        key: 'getData',
+	        value: function getData() {
+	            return this.data;
 	        }
 	
 	        /**
@@ -771,6 +785,20 @@
 	        value: function create() {
 	            var vertebraView = new _VertebraView2.default(this);
 	            return vertebraView.createDomElement();
+	        }
+	
+	        /**
+	         *
+	         */
+	
+	    }, {
+	        key: 'setHtmlData',
+	        value: function setHtmlData() {
+	            this.domElement.className = '';
+	            for (var ii in this.data) {
+	                console.log(this.data[ii]);
+	                this.domElement.className += ' ' + this.data[ii];
+	            }
 	        }
 	
 	        /**
@@ -789,6 +817,8 @@
 	        value: function updateRender() {
 	            this.domElement.style.left = this.coor.x + 'px';
 	            this.domElement.style.top = this.coor.y + 'px';
+	            this.setHtmlData();
+	            //console.log(this.domElement.classList);
 	        }
 	    }]);
 	

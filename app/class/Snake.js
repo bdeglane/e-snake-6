@@ -72,7 +72,10 @@ class Snake {
      * update backbone
      */
     updateBackbone() {
-        this.backbone.iterate(this.coor);
+        this.backbone.iterate(this.coor,{
+            base: "snake-body",
+            type: "body"
+        });
     }
 }
 export default Snake;

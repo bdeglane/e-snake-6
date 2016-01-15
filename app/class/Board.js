@@ -15,7 +15,7 @@ class Board {
         var game = document.getElementById(target);
         this.width = game.offsetWidth;
         this.height = game.offsetHeight;
-        console.log('width ' + this.width,'height ' + this.height);
+        //console.log('width ' + this.width,'height ' + this.height);
         this.caseSize = caseSize;
         this.domElement = this.create();
     }
@@ -35,6 +35,7 @@ class Board {
     }
 
     render(target) {
+        //console.log(this);
         var htmlDivTarget = document.getElementById(target);
         htmlDivTarget.appendChild(this.domElement)
     }

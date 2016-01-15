@@ -23,10 +23,16 @@ class Backbone {
         this.add(new Vertebra({
             x: caseSize,
             y: caseSize
+        },{
+            base: "snake-body",
+            type: "body"
         }));
         this.add(new Vertebra({
             x: caseSize * 2,
             y: caseSize
+        },{
+            base: "snake-body",
+            type: "body"
         }));
     }
 
@@ -52,32 +58,33 @@ class Backbone {
     /**
      *
      * @param newCoordinate Object
+     * @param newData Object
      */
-    iterate(newCoordinate) {
+    iterate(newCoordinate, newData) {
         var nextCoor;
-        var nextSate;
+        var nextData;
         //var vertebra;
         for (var ii = this.store.length - 1; ii >= 0; ii--) {
+            // if it's the body
             if (ii > 0) {
-
                 // get vertebra state and props
                 nextCoor = this.store[ii - 1].coor;
-                //nextSate = this.store[ii - 1].state;
-
-                //if (nextSate) {
-                    // if it's a new vertebra
-                    //this.store[ii].setState(nextSate);
-                    //delete this.store[ii - 1].state;
-                //}
-
+                nextData = this.store[ii - 1].data;
+                //console.log(nextData);
                 // update vertebra
+                // & update data
                 this.store[ii].setCoor(nextCoor);
+                this.store[ii].setData(nextData);
+                // else if it's the head
             } else if (ii == 0) {
-                // update vertebra
+                // update vertebra with new coordinate
                 this.store[ii].setCoor(newCoordinate);
+                this.store[ii].setData(newData);
             }
+            // actualize view
             this.store[ii].updateRender();
         }
+        //console.log(this.store);
     }
 }
 export default Backbone;

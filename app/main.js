@@ -1,6 +1,6 @@
 import Controller from './controller/Controller.js'
 
 var game = new Controller();
-console.log(game);
+//console.log(game);
 game.init();
-game.run(40);
+game.run(60);
