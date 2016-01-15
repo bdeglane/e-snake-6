@@ -1,27 +1,38 @@
-/**
- * Created by ben on 12/01/2016.
- */
 'use strict';
 import Board from '../class/Board.js';
 import Snake from '../class/Snake.js';
 import Vertebra from '../class/Vertebra.js';
 import View from '../view/View.js';
+import Score from '../class/Score.js';
 
 class Controller {
 
     constructor() {
         this.runGame = null;
-        this.view = null;
+        this.isGameRunning = false;
         this.data = {};
     }
 
     init() {
-        this.data.board = new Board(10,'game');
+        this.data.board = new Board(10, 'game');
         this.data.snake = new Snake(this.data.board.caseSize);
-        this.view = new View();
+        this.data.score = new Score();
         this.controls();
         this.build('game');
         this.generateFood();
+    }
+
+    //reset() {
+    //    this.data.snake = new Snake(this.data.board.caseSize);
+    //    this.data.score = new Score();
+    //    this.generateFood();
+    //}
+
+    cleanBoard() {
+        var board = document.getElementById('game');
+        while (board.firstChild) {
+            board.removeChild(board.firstChild);
+        }
     }
 
     controls() {
@@ -30,9 +41,13 @@ class Controller {
             if (e.keyCode >= 32 && e.keyCode <= 40) {
                 e.preventDefault();
                 switch (e.keyCode) {
-                    //case 32:
-                    //    start();
-                    //    break;
+                    case 32: // espace
+                        if (self.isGameRunning) {
+                            self.pause();
+                        } else {
+                            self.run(self.frequence);
+                        }
+                        break;
                     case 37: // Gauche
                         self.data.snake.moveLeft();
                         break;
@@ -57,16 +72,6 @@ class Controller {
         if (this.data.board.isInBoard(this.data.snake.coor)) {
             this.gameOver();
         }
-
-
-        //if (
-        //    this.data.snake.coor.x < 0 ||
-        //    this.data.snake.coor.x > this.data.board.width ||
-        //    this.data.snake.coor.y < 0 ||
-        //    this.data.snake.coor.y > this.data.board.height
-        //) {
-        //    this.gameOver();
-        //}
     }
 
     /**
@@ -114,6 +119,7 @@ class Controller {
     checkFood() {
         if (this.isEat()) {
             this.data.snake.backbone.add(this.data.food);
+            this.data.score.add();
             this.generateFood();
         }
     }
@@ -126,7 +132,6 @@ class Controller {
         this.edge();
         this.isCollide();
         this.checkFood();
-        //console.log(this);
     }
 
     /**
@@ -144,25 +149,35 @@ class Controller {
      */
     run(frequence) {
         var self = this;
+        this.frequence = frequence;
+        if (this.isPause) {
+            this.isPause = false;
+        } else {
+            this.cleanBoard();
+            this.init();
+        }
+        this.isGameRunning = true;
         this.runGame = setInterval(function () {
             self.frame();
         }, frequence);
     }
 
-    /**
-     *
-     */
-    stop() {
+    pause() {
         clearInterval(this.runGame);
+        this.isPause = true;
+        this.isGameRunning = false;
     }
 
-    /**
-     *
-     * @param target
-     */
-    build(target){
+    stop() {
+        clearInterval(this.runGame);
+        this.isGameRunning = false;
+        this.runGame = null;
+    }
+
+    build(target) {
         this.data.board.render(target);
         this.data.snake.backbone.render('board');
+        this.data.score.render(target);
     }
 }
 export default Controller;

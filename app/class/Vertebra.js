@@ -1,6 +1,3 @@
-/**
- * Created by ben on 13/01/2016.
- */
 'use strict';
 import VertebraView from '../view/VertebraView.js';
 

@@ -1,15 +1,7 @@
-/**
- * Created by ben on 12/01/2016.
- */
 'use strict';
 import Backbone from '../class/Backbone.js';
 
 class Snake {
-    /**
-     *
-     * @param caseSize
-     * @constructor
-     */
     constructor(caseSize) {
         this.coor = {
             x: caseSize * 2,

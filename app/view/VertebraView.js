@@ -1,14 +1,7 @@
-/**
- * Created by ben on 14/01/2016.
- */
 'use strict';
 import View from './View.js';
 
 class VertebraView extends View {
-    /**
-     *
-     * @param element
-     */
     constructor(element) {
         super();
         this.element = element;

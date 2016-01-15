@@ -6,7 +6,7 @@
     "type": "git",
     "url": "https://github.com/bdeglane/e-snake-6"
   },
-  "description": "A simple snake game in ECMAScript 6 with webpack for client-side development.",
+  "description": "A simple snake game in ECMAScript 6 with webpack.",
   "scripts": {
     "watch": "webpack --progress --colors --watch",
     "build": "webpack --progress --colors"
