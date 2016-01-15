@@ -11,6 +11,7 @@
     background: #e38d13;
     position: relative;
     z-index: 100;
+    overflow: hidden;
 }
 .snake-body {
     background: #006600;

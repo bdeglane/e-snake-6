@@ -76,7 +76,6 @@ class Vertebra {
     setHtmlData() {
         this.domElement.className = '';
         for (var ii in this.data) {
-            console.log(this.data[ii]);
             this.domElement.className += ' ' + this.data[ii];
         }
     }
@@ -86,6 +85,7 @@ class Vertebra {
      * @param target
      */
     render(target) {
+        this.setHtmlData();
         var htmlDivTarget = document.getElementById(target);
         htmlDivTarget.appendChild(this.domElement)
     }

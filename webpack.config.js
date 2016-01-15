@@ -37,11 +37,11 @@ module.exports = {
     plugins: [
         // Avoid publishing files when compilation fails
         //new webpack.NoErrorsPlugin(),
-        //new webpack.optimize.UglifyJsPlugin({
-        //    compress: {
-        //        warnings: false
-        //    }
-        //}),
+        new webpack.optimize.UglifyJsPlugin({
+            compress: {
+                warnings: false
+            }
+        }),
         //new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.js')
     ],
     stats: {
