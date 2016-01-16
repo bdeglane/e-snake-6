@@ -2,12 +2,6 @@
 import BoardView from '../view/BoardView.js';
 
 class Board {
-    /**
-     *
-     * @param caseSize
-     * @param target
-     * @constructor
-     */
     constructor(caseSize,target) {
         var game = document.getElementById(target);
         this.width = game.offsetWidth;

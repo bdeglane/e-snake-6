@@ -9,24 +9,20 @@ class Controller {
 
     constructor() {
         this.runGame = null;
-        this.isGameRunning = false;
         this.data = {};
+        this.controls();
     }
 
     init() {
-        this.data.board = new Board(10, 'game');
+        this.runGame = null;
+        this.data.board = new Board(40, 'game');
         this.data.snake = new Snake(this.data.board.caseSize);
         this.data.score = new Score();
-        this.controls();
         this.build('game');
         this.generateFood();
+        this.frequence = 80;
+        this.isPause = true;
     }
-
-    //reset() {
-    //    this.data.snake = new Snake(this.data.board.caseSize);
-    //    this.data.score = new Score();
-    //    this.generateFood();
-    //}
 
     cleanBoard() {
         var board = document.getElementById('game');
@@ -42,7 +38,7 @@ class Controller {
                 e.preventDefault();
                 switch (e.keyCode) {
                     case 32: // espace
-                        if (self.isGameRunning) {
+                        if (!self.isPause) {
                             self.pause();
                         } else {
                             self.run(self.frequence);
@@ -65,18 +61,12 @@ class Controller {
         }, false);
     }
 
-    /**
-     * check if Snake head stay inside the board
-     */
     edge() {
         if (this.data.board.isInBoard(this.data.snake.coor)) {
             this.gameOver();
         }
     }
 
-    /**
-     * generate random food on board
-     */
     generateFood() {
         this.data.food = new Vertebra({
                 x: Math.floor(Math.random() * (this.data.board.width / this.data.board.caseSize - 1 )) * this.data.board.caseSize,
@@ -89,20 +79,13 @@ class Controller {
         this.data.food.render('board');
     }
 
-    /**
-     *
-     * @returns {boolean}
-     */
     isEat() {
         return !!(this.data.snake.coor.x === this.data.food.coor.x && this.data.snake.coor.y === this.data.food.coor.y);
     }
 
-    /**
-     *
-     * @returns {boolean}
-     */
     isCollide() {
         var snakeHeadCoor = this.data.snake.coor;
+
         for (var ii = 1; ii < this.data.snake.backbone.store.length; ii++) {
             if (
                 this.data.snake.backbone.store[ii].coor.x === snakeHeadCoor.x &&
@@ -113,9 +96,6 @@ class Controller {
         }
     }
 
-    /**
-     *
-     */
     checkFood() {
         if (this.isEat()) {
             this.data.snake.backbone.add(this.data.food);
@@ -124,9 +104,6 @@ class Controller {
         }
     }
 
-    /**
-     * render a frame
-     */
     frame() {
         this.data.snake.move();
         this.edge();
@@ -134,29 +111,26 @@ class Controller {
         this.checkFood();
     }
 
-    /**
-     * finish
-     * you lose
-     */
     gameOver() {
         this.stop();
         console.log('game over');
     }
 
-    /**
-     * run game on specified frequence
-     * @param frequence number
-     */
     run(frequence) {
         var self = this;
         this.frequence = frequence;
-        if (this.isPause) {
-            this.isPause = false;
-        } else {
+
+
+        if (this.isNewGame === true && this.isPause) {
             this.cleanBoard();
             this.init();
+            delete this.isNewGame;
         }
-        this.isGameRunning = true;
+
+        if (this.isPause) {
+            this.isPause = false;
+        }
+
         this.runGame = setInterval(function () {
             self.frame();
         }, frequence);
@@ -165,13 +139,12 @@ class Controller {
     pause() {
         clearInterval(this.runGame);
         this.isPause = true;
-        this.isGameRunning = false;
     }
 
     stop() {
         clearInterval(this.runGame);
-        this.isGameRunning = false;
         this.runGame = null;
+        this.isNewGame = true;
     }
 
     build(target) {

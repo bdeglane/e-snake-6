@@ -2,11 +2,6 @@
 import VertebraView from '../view/VertebraView.js';
 
 class Vertebra {
-    /**
-     *
-     * @param coordinate Object
-     * @param data Object
-     */
     constructor(coordinate, data) {
         this.coor = {
             x: coordinate.x,
@@ -23,10 +18,6 @@ class Vertebra {
         this.domElement = this.create();
     }
 
-    /**
-     *
-     * @param coordinate
-     */
     setCoor(coordinate) {
         this.coor = {
             x: coordinate.x,
@@ -34,42 +25,23 @@ class Vertebra {
         };
     }
 
-    /**
-     *
-     * @returns {{x: *, y: *}|*}
-     */
     getCoor() {
         return this.coor;
     }
 
-    /**
-     *
-     * @param data Object
-     */
     setData(data) {
         this.data = data;
     }
 
-    /**
-     *
-     * @returns {{eat: boolean}|*}
-     */
     getData() {
         return this.data;
     }
 
-    /**
-     *
-     * @returns {*}
-     */
     create() {
         var vertebraView = new VertebraView(this);
         return vertebraView.createDomElement();
     }
 
-    /**
-     *
-     */
     setHtmlData() {
         this.domElement.className = '';
         for (var ii in this.data) {
@@ -77,10 +49,6 @@ class Vertebra {
         }
     }
 
-    /**
-     *
-     * @param target
-     */
     render(target) {
         this.setHtmlData();
         var htmlDivTarget = document.getElementById(target);
@@ -91,7 +59,6 @@ class Vertebra {
         this.domElement.style.left = this.coor.x + 'px';
         this.domElement.style.top = this.coor.y + 'px';
         this.setHtmlData();
-        //console.log(this.domElement.classList);
     }
 }
 export default Vertebra;

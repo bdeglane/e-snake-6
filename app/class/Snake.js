@@ -49,10 +49,6 @@ class Snake {
         this.updateBackbone(this.coor);
     }
 
-    /**
-     *
-     * @param coordinate
-     */
     setDir(coordinate) {
         this.dir = {
             x: coordinate.x,
@@ -60,9 +56,6 @@ class Snake {
         };
     }
 
-    /**
-     * update backbone
-     */
     updateBackbone() {
         this.backbone.iterate(this.coor,{
             base: "snake-body",
