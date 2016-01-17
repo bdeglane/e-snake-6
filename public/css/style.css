@@ -38,7 +38,7 @@ header p {
     padding: 5px;
     border-radius: 10%;
     position: absolute;
-    z-index: 400;
+    z-index: 200;
 }
 
 .food {
@@ -60,4 +60,6 @@ header p {
     font-weight: 700;
     font-size: 80px;
     color: #578970;
+
+    transform: translate(-50%, -50%);
 }

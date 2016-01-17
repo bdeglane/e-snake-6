@@ -9,7 +9,7 @@ class Score {
 
     add() {
         this.score++;
-        this.render('game');
+        this.render('board');
     }
 
     reset() {

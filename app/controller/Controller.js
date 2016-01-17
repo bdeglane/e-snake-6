@@ -150,7 +150,7 @@ class Controller {
     build(target) {
         this.data.board.render(target);
         this.data.snake.backbone.render('board');
-        this.data.score.render(target);
+        this.data.score.render('board');
     }
 }
 export default Controller;
